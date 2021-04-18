@@ -101,12 +101,7 @@ module.exports = (app) => {
 
         const page = req.query.page || 1
         Pet.paginate(
-            {
-                $or: [
-                    { 'name': term },
-                    { 'species': term }
-                ]
-            },
+            { $text: { $search: req.query.term } },
             { page: page }).then((results) => {
                 res.render('pets-index', { pets: results.docs, pagesCount: results.pages, currentPage: page, term: req.query.term });
             });
